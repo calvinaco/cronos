@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/armon/go-metrics v0.3.10
 	github.com/cosmos/cosmos-sdk v0.45.1
-	github.com/cosmos/ibc-go/v2 v2.0.2
+	github.com/cosmos/ibc-go/v3 v3.0.0-rc2
 	github.com/ethereum/go-ethereum v1.10.15
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2
@@ -42,10 +42,11 @@ require (
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/coinbase/rosetta-sdk-go v0.7.0 // indirect
-	github.com/confio/ics23/go v0.6.6 // indirect
+	github.com/confio/ics23/go v0.7.0 // indirect
 	github.com/cosmos/btcutil v1.0.4 // indirect
 	github.com/cosmos/go-bip39 v1.0.0 // indirect
 	github.com/cosmos/iavl v0.17.3 // indirect
+	github.com/cosmos/ibc-go/v2 v2.0.2 // indirect
 	github.com/cosmos/ledger-cosmos-go v0.11.1 // indirect
 	github.com/cosmos/ledger-go v0.9.2 // indirect
 	github.com/danieljoos/wincred v1.0.2 // indirect
@@ -61,10 +62,10 @@ require (
 	github.com/felixge/httpsnoop v1.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gballet/go-libpcsclite v0.0.0-20190607065134-2772fd86a8ff // indirect
-	github.com/gin-gonic/gin v1.7.0 // indirect
 	github.com/go-kit/kit v0.10.0 // indirect
 	github.com/go-logfmt/logfmt v0.5.0 // indirect
 	github.com/go-ole/go-ole v1.2.5 // indirect
+	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
 	github.com/gogo/gateway v1.1.0 // indirect
@@ -103,8 +104,6 @@ require (
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/mtibben/percent v0.2.1 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
-	github.com/opencontainers/image-spec v1.0.2 // indirect
-	github.com/opencontainers/runc v1.0.3 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
@@ -156,7 +155,7 @@ replace (
 	github.com/cosmos/cosmos-sdk => github.com/cosmos/cosmos-sdk v0.45.2-0.20220218085826-7f949c0aa1d6
 
 	// TODO: remove when middleware will be implemented
-	github.com/cosmos/ibc-go/v2 => github.com/crypto-org-chain/ibc-go/v2 v2.0.2-hooks
+	github.com/cosmos/ibc-go/v3 => github.com/calvinaco/ibc-go/v3 v3.0.0-hooks
 
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
@@ -164,7 +163,7 @@ replace (
 	// See https://github.com/tecbot/gorocksdb/pull/216
 	github.com/tecbot/gorocksdb => github.com/cosmos/gorocksdb v1.1.1
 
-	github.com/tharsis/ethermint => github.com/crypto-org-chain/ethermint v0.10.0-alpha1-cronos-7
+	github.com/tharsis/ethermint => github.com/calvinaco/ethermint v0.10.0-alpha1-cronos-7-ibc-go-v3.0.0-rc2-v0.0.1
 
 	google.golang.org/grpc => google.golang.org/grpc v1.33.2
 )
