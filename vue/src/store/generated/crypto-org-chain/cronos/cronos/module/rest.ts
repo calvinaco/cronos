@@ -30,6 +30,10 @@ export type CronosMsgTransferTokensResponse = object;
 
 export type CronosMsgUpdateTokenMappingResponse = object;
 
+export interface CronosQueryInterchainAccountResponse {
+  interchainAccountAddress?: string;
+}
+
 export interface ProtobufAny {
   "@type"?: string;
 }
@@ -275,6 +279,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryDenomByContract = (contract: string, params: RequestParams = {}) =>
     this.request<CronosDenomByContractResponse, RpcStatus>({
       path: `/cronos/v1/denom_by_contract/${contract}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryInterchainAccount
+   * @summary Queries a list of InterchainAccount items.
+   * @request GET:/crypto-org-chain/cronos/cronos/interchain_account/{connectionId}/{owner}
+   */
+  queryInterchainAccount = (connectionId: string, owner: string, params: RequestParams = {}) =>
+    this.request<CronosQueryInterchainAccountResponse, RpcStatus>({
+      path: `/crypto-org-chain/cronos/cronos/interchain_account/${connectionId}/${owner}`,
       method: "GET",
       format: "json",
       ...params,

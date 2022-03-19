@@ -27,8 +27,8 @@ type (
 		bankKeeper types.BankKeeper
 		// ibc transfer operations
 		transferKeeper types.TransferKeeper
-		// gravity bridge keeper
-		gravityKeeper types.GravityKeeper
+		//// gravity bridge keeper
+		//gravityKeeper types.GravityKeeper
 		// ethermint evm keeper
 		evmKeeper types.EvmKeeper
 
@@ -43,7 +43,7 @@ func NewKeeper(
 	paramSpace paramtypes.Subspace,
 	bankKeeper types.BankKeeper,
 	transferKeeper types.TransferKeeper,
-	gravityKeeper types.GravityKeeper,
+	//gravityKeeper types.GravityKeeper,
 	evmKeeper types.EvmKeeper,
 	// this line is used by starport scaffolding # ibc/keeper/parameter
 ) *Keeper {
@@ -60,8 +60,8 @@ func NewKeeper(
 		paramSpace:     paramSpace,
 		bankKeeper:     bankKeeper,
 		transferKeeper: transferKeeper,
-		gravityKeeper:  gravityKeeper,
-		evmKeeper:      evmKeeper,
+		//gravityKeeper:  gravityKeeper,
+		evmKeeper: evmKeeper,
 		// this line is used by starport scaffolding # ibc/keeper/return
 	}
 }

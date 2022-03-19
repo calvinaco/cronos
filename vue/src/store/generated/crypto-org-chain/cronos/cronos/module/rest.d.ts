@@ -14,6 +14,9 @@ export declare type CronosMsgConvertVouchersResponse = object;
  */
 export declare type CronosMsgTransferTokensResponse = object;
 export declare type CronosMsgUpdateTokenMappingResponse = object;
+export interface CronosQueryInterchainAccountResponse {
+    interchainAccountAddress?: string;
+}
 export interface ProtobufAny {
     "@type"?: string;
 }
@@ -109,5 +112,14 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @request GET:/cronos/v1/denom_by_contract/{contract}
      */
     queryDenomByContract: (contract: string, params?: RequestParams) => Promise<HttpResponse<CronosDenomByContractResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryInterchainAccount
+     * @summary Queries a list of InterchainAccount items.
+     * @request GET:/crypto-org-chain/cronos/cronos/interchain_account/{connectionId}/{owner}
+     */
+    queryInterchainAccount: (connectionId: string, owner: string, params?: RequestParams) => Promise<HttpResponse<CronosQueryInterchainAccountResponse, RpcStatus>>;
 }
 export {};

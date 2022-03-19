@@ -224,6 +224,127 @@ export const DenomByContractResponse = {
         return message;
     }
 };
+const baseQueryInterchainAccountRequest = { connectionId: '', owner: '' };
+export const QueryInterchainAccountRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.connectionId !== '') {
+            writer.uint32(10).string(message.connectionId);
+        }
+        if (message.owner !== '') {
+            writer.uint32(18).string(message.owner);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryInterchainAccountRequest };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.connectionId = reader.string();
+                    break;
+                case 2:
+                    message.owner = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryInterchainAccountRequest };
+        if (object.connectionId !== undefined && object.connectionId !== null) {
+            message.connectionId = String(object.connectionId);
+        }
+        else {
+            message.connectionId = '';
+        }
+        if (object.owner !== undefined && object.owner !== null) {
+            message.owner = String(object.owner);
+        }
+        else {
+            message.owner = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.connectionId !== undefined && (obj.connectionId = message.connectionId);
+        message.owner !== undefined && (obj.owner = message.owner);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryInterchainAccountRequest };
+        if (object.connectionId !== undefined && object.connectionId !== null) {
+            message.connectionId = object.connectionId;
+        }
+        else {
+            message.connectionId = '';
+        }
+        if (object.owner !== undefined && object.owner !== null) {
+            message.owner = object.owner;
+        }
+        else {
+            message.owner = '';
+        }
+        return message;
+    }
+};
+const baseQueryInterchainAccountResponse = { interchainAccountAddress: '' };
+export const QueryInterchainAccountResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.interchainAccountAddress !== '') {
+            writer.uint32(10).string(message.interchainAccountAddress);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryInterchainAccountResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.interchainAccountAddress = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryInterchainAccountResponse };
+        if (object.interchainAccountAddress !== undefined && object.interchainAccountAddress !== null) {
+            message.interchainAccountAddress = String(object.interchainAccountAddress);
+        }
+        else {
+            message.interchainAccountAddress = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.interchainAccountAddress !== undefined && (obj.interchainAccountAddress = message.interchainAccountAddress);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryInterchainAccountResponse };
+        if (object.interchainAccountAddress !== undefined && object.interchainAccountAddress !== null) {
+            message.interchainAccountAddress = object.interchainAccountAddress;
+        }
+        else {
+            message.interchainAccountAddress = '';
+        }
+        return message;
+    }
+};
 export class QueryClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
@@ -237,5 +358,10 @@ export class QueryClientImpl {
         const data = DenomByContractRequest.encode(request).finish();
         const promise = this.rpc.request('cronos.Query', 'DenomByContract', data);
         return promise.then((data) => DenomByContractResponse.decode(new Reader(data)));
+    }
+    InterchainAccount(request) {
+        const data = QueryInterchainAccountRequest.encode(request).finish();
+        const promise = this.rpc.request('cronos.Query', 'InterchainAccount', data);
+        return promise.then((data) => QueryInterchainAccountResponse.decode(new Reader(data)));
     }
 }

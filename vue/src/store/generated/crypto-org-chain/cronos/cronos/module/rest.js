@@ -164,5 +164,19 @@ export class Api extends HttpClient {
             format: "json",
             ...params,
         });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryInterchainAccount
+         * @summary Queries a list of InterchainAccount items.
+         * @request GET:/crypto-org-chain/cronos/cronos/interchain_account/{connectionId}/{owner}
+         */
+        this.queryInterchainAccount = (connectionId, owner, params = {}) => this.request({
+            path: `/crypto-org-chain/cronos/cronos/interchain_account/${connectionId}/${owner}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
     }
 }

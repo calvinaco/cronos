@@ -17,6 +17,13 @@ export interface DenomByContractRequest {
 export interface DenomByContractResponse {
     denom: string;
 }
+export interface QueryInterchainAccountRequest {
+    connectionId: string;
+    owner: string;
+}
+export interface QueryInterchainAccountResponse {
+    interchainAccountAddress: string;
+}
 export declare const ContractByDenomRequest: {
     encode(message: ContractByDenomRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): ContractByDenomRequest;
@@ -45,18 +52,35 @@ export declare const DenomByContractResponse: {
     toJSON(message: DenomByContractResponse): unknown;
     fromPartial(object: DeepPartial<DenomByContractResponse>): DenomByContractResponse;
 };
+export declare const QueryInterchainAccountRequest: {
+    encode(message: QueryInterchainAccountRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryInterchainAccountRequest;
+    fromJSON(object: any): QueryInterchainAccountRequest;
+    toJSON(message: QueryInterchainAccountRequest): unknown;
+    fromPartial(object: DeepPartial<QueryInterchainAccountRequest>): QueryInterchainAccountRequest;
+};
+export declare const QueryInterchainAccountResponse: {
+    encode(message: QueryInterchainAccountResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryInterchainAccountResponse;
+    fromJSON(object: any): QueryInterchainAccountResponse;
+    toJSON(message: QueryInterchainAccountResponse): unknown;
+    fromPartial(object: DeepPartial<QueryInterchainAccountResponse>): QueryInterchainAccountResponse;
+};
 /** Query defines the gRPC querier service. */
 export interface Query {
     /** ContractByDenom queries contract addresses by native denom */
     ContractByDenom(request: ContractByDenomRequest): Promise<ContractByDenomResponse>;
     /** DenomByContract queries native denom by contract address */
     DenomByContract(request: DenomByContractRequest): Promise<DenomByContractResponse>;
+    /** Queries a list of InterchainAccount items. */
+    InterchainAccount(request: QueryInterchainAccountRequest): Promise<QueryInterchainAccountResponse>;
 }
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
     ContractByDenom(request: ContractByDenomRequest): Promise<ContractByDenomResponse>;
     DenomByContract(request: DenomByContractRequest): Promise<DenomByContractResponse>;
+    InterchainAccount(request: QueryInterchainAccountRequest): Promise<QueryInterchainAccountResponse>;
 }
 interface Rpc {
     request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;

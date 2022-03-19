@@ -10,8 +10,6 @@ import (
 	"time"
 
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
-	"github.com/crypto-org-chain/cronos/x/cronos"
-
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
@@ -61,26 +59,27 @@ var DefaultConsensusParams = &abci.ConsensusParams{
 	},
 }
 
-// ExperimentalAppOptions is a stub implementing AppOptions
-type ExperimentalAppOptions struct{}
+//// ExperimentalAppOptions is a stub implementing AppOptions
+//type ExperimentalAppOptions struct{}
+//
+//// Get implements AppOptions
+//func (ao ExperimentalAppOptions) Get(o string) interface{} {
+//	if o == cronos.ExperimentalFlag {
+//		return true
+//	}
+//	return nil
+//}
 
-// Get implements AppOptions
-func (ao ExperimentalAppOptions) Get(o string) interface{} {
-	if o == cronos.ExperimentalFlag {
-		return true
-	}
-	return nil
-}
-
-func setup(withGenesis bool, invCheckPeriod uint, experimental bool) (*App, GenesisState) {
+//func setup(withGenesis bool, invCheckPeriod uint, experimental bool) (*App, GenesisState) {
+func setup(withGenesis bool, invCheckPeriod uint) (*App, GenesisState) {
 	db := dbm.NewMemDB()
 	encCdc := MakeEncodingConfig()
 	var appOption servertypes.AppOptions
-	if experimental {
-		appOption = ExperimentalAppOptions{}
-	} else {
-		appOption = EmptyAppOptions{}
-	}
+	//if experimental {
+	//	appOption = ExperimentalAppOptions{}
+	//} else {
+	appOption = EmptyAppOptions{}
+	//}
 	app := New(log.NewNopLogger(), db, nil, true, map[int64]bool{}, DefaultNodeHome, invCheckPeriod, encCdc, appOption)
 	if withGenesis {
 		return app, NewDefaultGenesisState(encCdc.Marshaler)
@@ -89,8 +88,10 @@ func setup(withGenesis bool, invCheckPeriod uint, experimental bool) (*App, Gene
 }
 
 // Setup initializes a new App. A Nop logger is set in App.
-func Setup(isCheckTx bool, cronosAdmin string, experimental bool) *App {
-	app, genesisState := setup(!isCheckTx, 5, experimental)
+//func Setup(isCheckTx bool, cronosAdmin string, experimental bool) *App {
+func Setup(isCheckTx bool, cronosAdmin string) *App {
+	//app, genesisState := setup(!isCheckTx, 5, experimental)
+	app, genesisState := setup(!isCheckTx, 5)
 
 	// set cronos_admin for test
 	cronosGen := cronostypes.DefaultGenesis()
@@ -125,7 +126,8 @@ func Setup(isCheckTx bool, cronosAdmin string, experimental bool) *App {
 // of one consensus engine unit (10^6) in the default token of the simapp from first genesis
 // account. A Nop logger is set in App.
 func SetupWithGenesisValSet(t *testing.T, valSet *tmtypes.ValidatorSet, genAccs []authtypes.GenesisAccount, balances ...banktypes.Balance) *App {
-	app, genesisState := setup(true, 5, true)
+	//app, genesisState := setup(true, 5, true)
+	app, genesisState := setup(true, 5)
 	// set genesis accounts
 	authGenesis := authtypes.NewGenesisState(authtypes.DefaultParams(), genAccs)
 	genesisState[authtypes.ModuleName] = app.AppCodec().MustMarshalJSON(authGenesis)
@@ -205,7 +207,8 @@ func SetupWithGenesisValSet(t *testing.T, valSet *tmtypes.ValidatorSet, genAccs 
 // SetupWithGenesisAccounts initializes a new App with the provided genesis
 // accounts and possible balances.
 func SetupWithGenesisAccounts(genAccs []authtypes.GenesisAccount, balances ...banktypes.Balance) *App {
-	app, genesisState := setup(true, 0, true)
+	//app, genesisState := setup(true, 0, true)
+	app, genesisState := setup(true, 0)
 	authGenesis := authtypes.NewGenesisState(authtypes.DefaultParams(), genAccs)
 	genesisState[authtypes.ModuleName] = app.AppCodec().MustMarshalJSON(authGenesis)
 

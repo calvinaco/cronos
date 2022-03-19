@@ -24,6 +24,15 @@ export interface DenomByContractResponse {
   denom: string
 }
 
+export interface QueryInterchainAccountRequest {
+  connectionId: string
+  owner: string
+}
+
+export interface QueryInterchainAccountResponse {
+  interchainAccountAddress: string
+}
+
 const baseContractByDenomRequest: object = { denom: '' }
 
 export const ContractByDenomRequest = {
@@ -261,12 +270,141 @@ export const DenomByContractResponse = {
   }
 }
 
+const baseQueryInterchainAccountRequest: object = { connectionId: '', owner: '' }
+
+export const QueryInterchainAccountRequest = {
+  encode(message: QueryInterchainAccountRequest, writer: Writer = Writer.create()): Writer {
+    if (message.connectionId !== '') {
+      writer.uint32(10).string(message.connectionId)
+    }
+    if (message.owner !== '') {
+      writer.uint32(18).string(message.owner)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryInterchainAccountRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryInterchainAccountRequest } as QueryInterchainAccountRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.connectionId = reader.string()
+          break
+        case 2:
+          message.owner = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryInterchainAccountRequest {
+    const message = { ...baseQueryInterchainAccountRequest } as QueryInterchainAccountRequest
+    if (object.connectionId !== undefined && object.connectionId !== null) {
+      message.connectionId = String(object.connectionId)
+    } else {
+      message.connectionId = ''
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = String(object.owner)
+    } else {
+      message.owner = ''
+    }
+    return message
+  },
+
+  toJSON(message: QueryInterchainAccountRequest): unknown {
+    const obj: any = {}
+    message.connectionId !== undefined && (obj.connectionId = message.connectionId)
+    message.owner !== undefined && (obj.owner = message.owner)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryInterchainAccountRequest>): QueryInterchainAccountRequest {
+    const message = { ...baseQueryInterchainAccountRequest } as QueryInterchainAccountRequest
+    if (object.connectionId !== undefined && object.connectionId !== null) {
+      message.connectionId = object.connectionId
+    } else {
+      message.connectionId = ''
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner
+    } else {
+      message.owner = ''
+    }
+    return message
+  }
+}
+
+const baseQueryInterchainAccountResponse: object = { interchainAccountAddress: '' }
+
+export const QueryInterchainAccountResponse = {
+  encode(message: QueryInterchainAccountResponse, writer: Writer = Writer.create()): Writer {
+    if (message.interchainAccountAddress !== '') {
+      writer.uint32(10).string(message.interchainAccountAddress)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryInterchainAccountResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryInterchainAccountResponse } as QueryInterchainAccountResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.interchainAccountAddress = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryInterchainAccountResponse {
+    const message = { ...baseQueryInterchainAccountResponse } as QueryInterchainAccountResponse
+    if (object.interchainAccountAddress !== undefined && object.interchainAccountAddress !== null) {
+      message.interchainAccountAddress = String(object.interchainAccountAddress)
+    } else {
+      message.interchainAccountAddress = ''
+    }
+    return message
+  },
+
+  toJSON(message: QueryInterchainAccountResponse): unknown {
+    const obj: any = {}
+    message.interchainAccountAddress !== undefined && (obj.interchainAccountAddress = message.interchainAccountAddress)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryInterchainAccountResponse>): QueryInterchainAccountResponse {
+    const message = { ...baseQueryInterchainAccountResponse } as QueryInterchainAccountResponse
+    if (object.interchainAccountAddress !== undefined && object.interchainAccountAddress !== null) {
+      message.interchainAccountAddress = object.interchainAccountAddress
+    } else {
+      message.interchainAccountAddress = ''
+    }
+    return message
+  }
+}
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** ContractByDenom queries contract addresses by native denom */
   ContractByDenom(request: ContractByDenomRequest): Promise<ContractByDenomResponse>
   /** DenomByContract queries native denom by contract address */
   DenomByContract(request: DenomByContractRequest): Promise<DenomByContractResponse>
+  /** Queries a list of InterchainAccount items. */
+  InterchainAccount(request: QueryInterchainAccountRequest): Promise<QueryInterchainAccountResponse>
 }
 
 export class QueryClientImpl implements Query {
@@ -284,6 +422,12 @@ export class QueryClientImpl implements Query {
     const data = DenomByContractRequest.encode(request).finish()
     const promise = this.rpc.request('cronos.Query', 'DenomByContract', data)
     return promise.then((data) => DenomByContractResponse.decode(new Reader(data)))
+  }
+
+  InterchainAccount(request: QueryInterchainAccountRequest): Promise<QueryInterchainAccountResponse> {
+    const data = QueryInterchainAccountRequest.encode(request).finish()
+    const promise = this.rpc.request('cronos.Query', 'InterchainAccount', data)
+    return promise.then((data) => QueryInterchainAccountResponse.decode(new Reader(data)))
   }
 }
 

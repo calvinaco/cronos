@@ -5,9 +5,9 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-    "github.com/crypto-org-chain/cronos/x/interstaking/types"
-    "github.com/crypto-org-chain/cronos/x/interstaking/keeper"
-    keepertest "github.com/crypto-org-chain/cronos/testutil/keeper"
+	keepertest "github.com/crypto-org-chain/cronos/testutil/keeper"
+	"github.com/crypto-org-chain/cronos/x/interstaking/keeper"
+	"github.com/crypto-org-chain/cronos/x/interstaking/types"
 )
 
 func setupMsgServer(t testing.TB) (types.MsgServer, context.Context) {

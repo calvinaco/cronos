@@ -19,7 +19,7 @@ service Query {
         option (google.api.http).get = "/cronos/v1/denom_by_contract/{contract}";
     }
 
-    // this line is used by starport scaffolding # 2
+// this line is used by starport scaffolding # 2
 }
 
 // ContractByDenomRequest is the request type of ContractByDenom call

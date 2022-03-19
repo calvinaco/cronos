@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/require"
-	testkeeper 	"github.com/crypto-org-chain/cronos/testutil/keeper"
+	testkeeper "github.com/crypto-org-chain/cronos/testutil/keeper"
 	"github.com/crypto-org-chain/cronos/x/interstaking/types"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParamsQuery(t *testing.T) {

@@ -15,5 +15,6 @@ declare const _default: {
     CosmosCosmosSdkIbcCoreConnectionV1: (store: any) => void;
     CryptoOrgChainCronosCronos: (store: any) => void;
     CryptoOrgChainCronosCryptoorgchainCronosCronos: (store: any) => void;
+    CryptoOrgChainCronosCryptoorgchainCronosInterstaking: (store: any) => void;
 };
 export default _default;

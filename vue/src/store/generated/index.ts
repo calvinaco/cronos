@@ -16,6 +16,7 @@ import CosmosCosmosSdkIbcCoreClientV1 from './cosmos/cosmos-sdk/ibc.core.client.
 import CosmosCosmosSdkIbcCoreConnectionV1 from './cosmos/cosmos-sdk/ibc.core.connection.v1'
 import CryptoOrgChainCronosCronos from './crypto-org-chain/cronos/cronos'
 import CryptoOrgChainCronosCryptoorgchainCronosCronos from './crypto-org-chain/cronos/cryptoorgchain.cronos.cronos'
+import CryptoOrgChainCronosCryptoorgchainCronosInterstaking from './crypto-org-chain/cronos/cryptoorgchain.cronos.interstaking'
 
 
 export default { 
@@ -35,6 +36,7 @@ export default {
   CosmosCosmosSdkIbcCoreConnectionV1: load(CosmosCosmosSdkIbcCoreConnectionV1, 'ibc.core.connection.v1'),
   CryptoOrgChainCronosCronos: load(CryptoOrgChainCronosCronos, 'cronos'),
   CryptoOrgChainCronosCryptoorgchainCronosCronos: load(CryptoOrgChainCronosCryptoorgchainCronosCronos, 'cryptoorgchain.cronos.cronos'),
+  CryptoOrgChainCronosCryptoorgchainCronosInterstaking: load(CryptoOrgChainCronosCryptoorgchainCronosInterstaking, 'cryptoorgchain.cronos.interstaking'),
   
 }
 

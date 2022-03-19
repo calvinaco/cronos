@@ -4,15 +4,15 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgTransferTokens } from "./types/cronos/tx";
 import { MsgUpdateTokenMapping } from "./types/cronos/tx";
 import { MsgConvertVouchers } from "./types/cronos/tx";
+import { MsgTransferTokens } from "./types/cronos/tx";
 
 
 const types = [
-  ["/cronos.MsgTransferTokens", MsgTransferTokens],
   ["/cronos.MsgUpdateTokenMapping", MsgUpdateTokenMapping],
   ["/cronos.MsgConvertVouchers", MsgConvertVouchers],
+  ["/cronos.MsgTransferTokens", MsgTransferTokens],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -45,9 +45,9 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgTransferTokens: (data: MsgTransferTokens): EncodeObject => ({ typeUrl: "/cronos.MsgTransferTokens", value: MsgTransferTokens.fromPartial( data ) }),
     msgUpdateTokenMapping: (data: MsgUpdateTokenMapping): EncodeObject => ({ typeUrl: "/cronos.MsgUpdateTokenMapping", value: MsgUpdateTokenMapping.fromPartial( data ) }),
     msgConvertVouchers: (data: MsgConvertVouchers): EncodeObject => ({ typeUrl: "/cronos.MsgConvertVouchers", value: MsgConvertVouchers.fromPartial( data ) }),
+    msgTransferTokens: (data: MsgTransferTokens): EncodeObject => ({ typeUrl: "/cronos.MsgTransferTokens", value: MsgTransferTokens.fromPartial( data ) }),
     
   };
 };

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math/big"
 
-	gravitytypes "github.com/peggyjv/gravity-bridge/module/x/gravity/types"
+	//gravitytypes "github.com/peggyjv/gravity-bridge/module/x/gravity/types"
 
 	"github.com/crypto-org-chain/cronos/app"
 	keepertest "github.com/crypto-org-chain/cronos/x/cronos/keeper/mock"
@@ -173,11 +173,11 @@ func (suite *KeeperTestSuite) TestEvmHooks() {
 				// sender's balance deducted
 				balance = suite.app.BankKeeper.GetBalance(suite.ctx, sdk.AccAddress(contract.Bytes()), denom)
 				suite.Require().Equal(sdk.NewCoin(denom, sdk.NewInt(0)), balance)
-				// query unbatched SendToEthereum message exist
-				rsp, err := suite.app.GravityKeeper.UnbatchedSendToEthereums(sdk.WrapSDKContext(suite.ctx), &gravitytypes.UnbatchedSendToEthereumsRequest{
-					SenderAddress: sdk.AccAddress(contract.Bytes()).String(),
-				})
-				suite.Require().Equal(1, len(rsp.SendToEthereums))
+				//// query unbatched SendToEthereum message exist
+				//rsp, err := suite.app.GravityKeeper.UnbatchedSendToEthereums(sdk.WrapSDKContext(suite.ctx), &gravitytypes.UnbatchedSendToEthereumsRequest{
+				//	SenderAddress: sdk.AccAddress(contract.Bytes()).String(),
+				//})
+				//suite.Require().Equal(1, len(rsp.SendToEthereums))
 			},
 		},
 		{
@@ -192,7 +192,7 @@ func (suite *KeeperTestSuite) TestEvmHooks() {
 					suite.app.GetSubspace(types.ModuleName),
 					suite.app.BankKeeper,
 					keepertest.IbcKeeperMock{},
-					suite.app.GravityKeeper,
+					//suite.app.GravityKeeper,
 					suite.app.EvmKeeper,
 				)
 				suite.app.CronosKeeper = cronosKeeper

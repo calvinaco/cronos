@@ -30,9 +30,9 @@ var (
 	// this line is used by starport scaffolding # ibc/module/interface
 )
 
-const (
-	ExperimentalFlag = "unsafe-experimental"
-)
+//const (
+//	ExperimentalFlag = "unsafe-experimental"
+//)
 
 // ----------------------------------------------------------------------------
 // AppModuleBasic
@@ -49,7 +49,7 @@ func NewAppModuleBasic(cdc codec.Codec) AppModuleBasic {
 
 // AddModuleInitFlags implements servertypes.ModuleInitFlags interface.
 func AddModuleInitFlags(startCmd *cobra.Command) {
-	startCmd.Flags().Bool(ExperimentalFlag, false, "Start the node with experimental features")
+	//startCmd.Flags().Bool(ExperimentalFlag, false, "Start the node with experimental features")
 }
 
 // Name returns the capability module's name.

@@ -7,14 +7,15 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
-	gravitytypes "github.com/peggyjv/gravity-bridge/module/x/gravity/types"
+
+	//gravitytypes "github.com/peggyjv/gravity-bridge/module/x/gravity/types"
 
 	"github.com/crypto-org-chain/cronos/x/cronos/types"
 )
 
 var (
 	_ types.EvmLogHandler = SendToAccountHandler{}
-	_ types.EvmLogHandler = SendToEthereumHandler{}
+	//_ types.EvmLogHandler = SendToEthereumHandler{}
 	_ types.EvmLogHandler = SendToIbcHandler{}
 	_ types.EvmLogHandler = SendCroToIbcHandler{}
 )
@@ -159,61 +160,61 @@ func (h SendToAccountHandler) Handle(ctx sdk.Context, contract common.Address, d
 	return nil
 }
 
-// SendToEthereumHandler handles `__CronosSendToEthereum` log
-type SendToEthereumHandler struct {
-	gravitySrv   gravitytypes.MsgServer
-	cronosKeeper Keeper
-}
-
-func NewSendToEthereumHandler(gravitySrv gravitytypes.MsgServer, cronosKeeper Keeper) *SendToEthereumHandler {
-	return &SendToEthereumHandler{
-		gravitySrv:   gravitySrv,
-		cronosKeeper: cronosKeeper,
-	}
-}
-
-func (h SendToEthereumHandler) EventID() common.Hash {
-	return SendToEthereumEvent.ID
-}
-
-// Handle `__CronosSendToEthereum` log only if gravity is activated.
-func (h SendToEthereumHandler) Handle(ctx sdk.Context, contract common.Address, data []byte) error {
-	if h.gravitySrv == nil {
-		return fmt.Errorf("native action %s is not implemented", SendToEthereumEventName)
-	}
-
-	unpacked, err := SendToEthereumEvent.Inputs.Unpack(data)
-	if err != nil {
-		// log and ignore
-		h.cronosKeeper.Logger(ctx).Info("log signature matches but failed to decode")
-		return nil
-	}
-
-	denom, found := h.cronosKeeper.GetDenomByContract(ctx, contract)
-	if !found {
-		return fmt.Errorf("contract %s is not connected to native token", contract)
-	}
-
-	if !types.IsValidGravityDenom(denom) {
-		return fmt.Errorf("the native token associated with the contract %s is not a gravity voucher", contract)
-	}
-
-	contractAddr := sdk.AccAddress(contract.Bytes())
-	ethRecipient := unpacked[0].(common.Address)
-	amount := sdk.NewIntFromBigInt(unpacked[1].(*big.Int))
-	bridgeFee := sdk.NewIntFromBigInt(unpacked[2].(*big.Int))
-	msg := gravitytypes.MsgSendToEthereum{
-		Sender:            contractAddr.String(),
-		EthereumRecipient: ethRecipient.Hex(),
-		Amount:            sdk.NewCoin(denom, amount),
-		BridgeFee:         sdk.NewCoin(denom, bridgeFee),
-	}
-	_, err = h.gravitySrv.SendToEthereum(sdk.WrapSDKContext(ctx), &msg)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+//// SendToEthereumHandler handles `__CronosSendToEthereum` log
+//type SendToEthereumHandler struct {
+//	gravitySrv   gravitytypes.MsgServer
+//	cronosKeeper Keeper
+//}
+//
+//func NewSendToEthereumHandler(gravitySrv gravitytypes.MsgServer, cronosKeeper Keeper) *SendToEthereumHandler {
+//	return &SendToEthereumHandler{
+//		gravitySrv:   gravitySrv,
+//		cronosKeeper: cronosKeeper,
+//	}
+//}
+//
+//func (h SendToEthereumHandler) EventID() common.Hash {
+//	return SendToEthereumEvent.ID
+//}
+//
+//// Handle `__CronosSendToEthereum` log only if gravity is activated.
+//func (h SendToEthereumHandler) Handle(ctx sdk.Context, contract common.Address, data []byte) error {
+//	if h.gravitySrv == nil {
+//		return fmt.Errorf("native action %s is not implemented", SendToEthereumEventName)
+//	}
+//
+//	unpacked, err := SendToEthereumEvent.Inputs.Unpack(data)
+//	if err != nil {
+//		// log and ignore
+//		h.cronosKeeper.Logger(ctx).Info("log signature matches but failed to decode")
+//		return nil
+//	}
+//
+//	denom, found := h.cronosKeeper.GetDenomByContract(ctx, contract)
+//	if !found {
+//		return fmt.Errorf("contract %s is not connected to native token", contract)
+//	}
+//
+//	if !types.IsValidGravityDenom(denom) {
+//		return fmt.Errorf("the native token associated with the contract %s is not a gravity voucher", contract)
+//	}
+//
+//	contractAddr := sdk.AccAddress(contract.Bytes())
+//	ethRecipient := unpacked[0].(common.Address)
+//	amount := sdk.NewIntFromBigInt(unpacked[1].(*big.Int))
+//	bridgeFee := sdk.NewIntFromBigInt(unpacked[2].(*big.Int))
+//	msg := gravitytypes.MsgSendToEthereum{
+//		Sender:            contractAddr.String(),
+//		EthereumRecipient: ethRecipient.Hex(),
+//		Amount:            sdk.NewCoin(denom, amount),
+//		BridgeFee:         sdk.NewCoin(denom, bridgeFee),
+//	}
+//	_, err = h.gravitySrv.SendToEthereum(sdk.WrapSDKContext(ctx), &msg)
+//	if err != nil {
+//		return err
+//	}
+//	return nil
+//}
 
 // SendToIbcHandler handles `__CronosSendToIbc` log
 type SendToIbcHandler struct {

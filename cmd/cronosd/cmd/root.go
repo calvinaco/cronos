@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/crypto-org-chain/cronos/cmd/cronosd/experimental"
 	"github.com/crypto-org-chain/cronos/x/cronos"
 
 	"github.com/cosmos/cosmos-sdk/simapp/params"
@@ -127,7 +126,7 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 
 	a := appCreator{encodingConfig}
 	ethermintserver.AddCommands(rootCmd, app.DefaultNodeHome, a.newApp, a.appExport, addModuleInitFlags)
-	experimental.AddCommands(rootCmd)
+	//experimental.AddCommands(rootCmd)
 
 	// add keybase, auxiliary RPC, query, and tx child commands
 	rootCmd.AddCommand(

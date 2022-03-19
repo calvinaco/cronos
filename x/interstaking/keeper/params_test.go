@@ -3,9 +3,9 @@ package keeper_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	testkeeper "github.com/crypto-org-chain/cronos/testutil/keeper"
 	"github.com/crypto-org-chain/cronos/x/interstaking/types"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGetParams(t *testing.T) {

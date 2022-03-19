@@ -8,7 +8,6 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/vm"
-	gravitytypes "github.com/peggyjv/gravity-bridge/module/x/gravity/types"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 )
@@ -43,11 +42,11 @@ type AccountKeeper interface {
 	GetModuleAccount(ctx sdk.Context, moduleName string) authtypes.ModuleAccountI
 }
 
-// GravityKeeper defines the expected gravity keeper interface
-type GravityKeeper interface {
-	ERC20ToDenomLookup(ctx sdk.Context, tokenContract string) (bool, string)
-	GetParams(ctx sdk.Context) (params gravitytypes.Params)
-}
+//// GravityKeeper defines the expected gravity keeper interface
+//type GravityKeeper interface {
+//	ERC20ToDenomLookup(ctx sdk.Context, tokenContract string) (bool, string)
+//	GetParams(ctx sdk.Context) (params gravitytypes.Params)
+//}
 
 // EvmLogHandler defines the interface for evm log handler
 type EvmLogHandler interface {

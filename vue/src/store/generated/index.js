@@ -15,6 +15,7 @@ import CosmosCosmosSdkIbcCoreClientV1 from './cosmos/cosmos-sdk/ibc.core.client.
 import CosmosCosmosSdkIbcCoreConnectionV1 from './cosmos/cosmos-sdk/ibc.core.connection.v1';
 import CryptoOrgChainCronosCronos from './crypto-org-chain/cronos/cronos';
 import CryptoOrgChainCronosCryptoorgchainCronosCronos from './crypto-org-chain/cronos/cryptoorgchain.cronos.cronos';
+import CryptoOrgChainCronosCryptoorgchainCronosInterstaking from './crypto-org-chain/cronos/cryptoorgchain.cronos.interstaking';
 export default {
     CosmosCosmosSdkCosmosBankV1Beta1: load(CosmosCosmosSdkCosmosBankV1Beta1, 'cosmos.bank.v1beta1'),
     CosmosCosmosSdkCosmosBaseAbciV1Beta1: load(CosmosCosmosSdkCosmosBaseAbciV1Beta1, 'cosmos.base.abci.v1beta1'),
@@ -32,6 +33,7 @@ export default {
     CosmosCosmosSdkIbcCoreConnectionV1: load(CosmosCosmosSdkIbcCoreConnectionV1, 'ibc.core.connection.v1'),
     CryptoOrgChainCronosCronos: load(CryptoOrgChainCronosCronos, 'cronos'),
     CryptoOrgChainCronosCryptoorgchainCronosCronos: load(CryptoOrgChainCronosCryptoorgchainCronosCronos, 'cryptoorgchain.cronos.cronos'),
+    CryptoOrgChainCronosCryptoorgchainCronosInterstaking: load(CryptoOrgChainCronosCryptoorgchainCronosInterstaking, 'cryptoorgchain.cronos.interstaking'),
 };
 function load(mod, fullns) {
     return function init(store) {

@@ -47,6 +47,7 @@ const getDefaultState = () => {
 	return {
 				ContractByDenom: {},
 				DenomByContract: {},
+				InterchainAccount: {},
 				
 				_Structure: {
 						Params: getStructure(Params.fromPartial({})),
@@ -91,6 +92,12 @@ export default {
 						(<any> params).query=null
 					}
 			return state.DenomByContract[JSON.stringify(params)] ?? {}
+		},
+				getInterchainAccount: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.InterchainAccount[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -170,21 +177,28 @@ export default {
 		},
 		
 		
-		async sendMsgTransferTokens({ rootGetters }, { value, fee = [], memo = '' }) {
+		
+		
+		 		
+		
+		
+		async QueryInterchainAccount({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
 			try {
-				const txClient=await initTxClient(rootGetters)
-				const msg = await txClient.msgTransferTokens(value)
-				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
-	gas: "200000" }, memo})
-				return result
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryInterchainAccount( key.connectionId,  key.owner)).data
+				
+					
+				commit('QUERY', { query: 'InterchainAccount', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryInterchainAccount', payload: { options: { all }, params: {...key},query }})
+				return getters['getInterchainAccount']( { params: {...key}, query}) ?? {}
 			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new SpVuexError('TxClient:MsgTransferTokens:Init', 'Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new SpVuexError('TxClient:MsgTransferTokens:Send', 'Could not broadcast Tx: '+ e.message)
-				}
+				throw new SpVuexError('QueryClient:QueryInterchainAccount', 'API Node Unavailable. Could not perform query: ' + e.message)
+				
 			}
 		},
+		
+		
 		async sendMsgUpdateTokenMapping({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
@@ -215,21 +229,22 @@ export default {
 				}
 			}
 		},
-		
-		async MsgTransferTokens({ rootGetters }, { value }) {
+		async sendMsgTransferTokens({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
 				const msg = await txClient.msgTransferTokens(value)
-				return msg
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
+				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new SpVuexError('TxClient:MsgTransferTokens:Init', 'Could not initialize signing client. Wallet is required.')
 				}else{
-					throw new SpVuexError('TxClient:MsgTransferTokens:Create', 'Could not create message: ' + e.message)
-					
+					throw new SpVuexError('TxClient:MsgTransferTokens:Send', 'Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
+		
 		async MsgUpdateTokenMapping({ rootGetters }, { value }) {
 			try {
 				const txClient=await initTxClient(rootGetters)
@@ -254,6 +269,20 @@ export default {
 					throw new SpVuexError('TxClient:MsgConvertVouchers:Init', 'Could not initialize signing client. Wallet is required.')
 				}else{
 					throw new SpVuexError('TxClient:MsgConvertVouchers:Create', 'Could not create message: ' + e.message)
+					
+				}
+			}
+		},
+		async MsgTransferTokens({ rootGetters }, { value }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgTransferTokens(value)
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new SpVuexError('TxClient:MsgTransferTokens:Init', 'Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new SpVuexError('TxClient:MsgTransferTokens:Create', 'Could not create message: ' + e.message)
 					
 				}
 			}
