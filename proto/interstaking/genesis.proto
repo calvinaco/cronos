@@ -1,0 +1,15 @@
+syntax = "proto3";
+package cryptoorgchain.cronos.interstaking;
+
+import "gogoproto/gogo.proto";
+import "interstaking/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/crypto-org-chain/cronos/x/interstaking/types";
+
+// GenesisState defines the interstaking module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  string port_id = 2;
+  // this line is used by starport scaffolding # genesis/proto/state
+}

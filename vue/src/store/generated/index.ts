@@ -14,6 +14,7 @@ import CosmosCosmosSdkIbcApplicationsTransferV1 from './cosmos/cosmos-sdk/ibc.ap
 import CosmosCosmosSdkIbcCoreChannelV1 from './cosmos/cosmos-sdk/ibc.core.channel.v1'
 import CosmosCosmosSdkIbcCoreClientV1 from './cosmos/cosmos-sdk/ibc.core.client.v1'
 import CosmosCosmosSdkIbcCoreConnectionV1 from './cosmos/cosmos-sdk/ibc.core.connection.v1'
+import CryptoOrgChainCronosCronos from './crypto-org-chain/cronos/cronos'
 import CryptoOrgChainCronosCryptoorgchainCronosCronos from './crypto-org-chain/cronos/cryptoorgchain.cronos.cronos'
 
 
@@ -32,6 +33,7 @@ export default {
   CosmosCosmosSdkIbcCoreChannelV1: load(CosmosCosmosSdkIbcCoreChannelV1, 'ibc.core.channel.v1'),
   CosmosCosmosSdkIbcCoreClientV1: load(CosmosCosmosSdkIbcCoreClientV1, 'ibc.core.client.v1'),
   CosmosCosmosSdkIbcCoreConnectionV1: load(CosmosCosmosSdkIbcCoreConnectionV1, 'ibc.core.connection.v1'),
+  CryptoOrgChainCronosCronos: load(CryptoOrgChainCronosCronos, 'cronos'),
   CryptoOrgChainCronosCryptoorgchainCronosCronos: load(CryptoOrgChainCronosCryptoorgchainCronosCronos, 'cryptoorgchain.cronos.cronos'),
   
 }
