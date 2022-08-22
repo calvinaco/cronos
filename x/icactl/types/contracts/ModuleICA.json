@@ -1,0 +1,64 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "channelID",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "sequence",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "error",
+          "type": "string"
+        }
+      ],
+      "name": "onICAPacketError",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "channelID",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "sequence",
+          "type": "uint256"
+        }
+      ],
+      "name": "onICAPacketResult",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "channelID",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "sequence",
+          "type": "uint256"
+        }
+      ],
+      "name": "onICAPacketTimeout",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bin": "608060405234801561001057600080fd5b5061027b806100206000396000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c8063733f50fc146100465780638bdeec0714610062578063eeb6be431461007e575b600080fd5b610060600480360381019061005b9190610150565b61009a565b005b61007c60048036038101906100779190610150565b61009f565b005b610098600480360381019061009391906101b0565b6100a4565b005b505050565b505050565b5050505050565b600080fd5b600080fd5b600080fd5b600080fd5b600080fd5b60008083601f8401126100da576100d96100b5565b5b8235905067ffffffffffffffff8111156100f7576100f66100ba565b5b602083019150836001820283011115610113576101126100bf565b5b9250929050565b6000819050919050565b61012d8161011a565b811461013857600080fd5b50565b60008135905061014a81610124565b92915050565b600080600060408486031215610169576101686100ab565b5b600084013567ffffffffffffffff811115610187576101866100b0565b5b610193868287016100c4565b935093505060206101a68682870161013b565b9150509250925092565b6000806000806000606086880312156101cc576101cb6100ab565b5b600086013567ffffffffffffffff8111156101ea576101e96100b0565b5b6101f6888289016100c4565b955095505060206102098882890161013b565b935050604086013567ffffffffffffffff81111561022a576102296100b0565b5b610236888289016100c4565b9250925050929550929590935056fea264697066735822122045e4a7f19729320bc434afc43251486e7d53aaa72b09a1d01b27d90f6cf20fa964736f6c63430008090033"
+}

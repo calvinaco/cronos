@@ -162,6 +162,6 @@ replace (
 	google.golang.org/grpc => google.golang.org/grpc v1.33.2
 )
 
-replace github.com/evmos/ethermint => github.com/mmsqe/ethermint v0.7.0-rc10
+replace github.com/evmos/ethermint => github.com/calvinaco/ethermint v0.6.1-0.20220823151120-70b9ef545e62
 
 replace github.com/ethereum/go-ethereum => github.com/yihuang/go-ethereum v1.10.17-0.20220701082238-e1e3fc47e56a

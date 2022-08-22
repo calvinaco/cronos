@@ -333,6 +333,7 @@ func New(
 		evmtypes.StoreKey, feemarkettypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 		cronostypes.StoreKey,
+		icactlmoduletypes.StoreKey,
 	}
 	if experimental {
 		storeKeys = append(storeKeys, gravitytypes.StoreKey)
@@ -430,6 +431,7 @@ func New(
 		appCodec, app.GetSubspace(feemarkettypes.ModuleName), keys[feemarkettypes.StoreKey], tkeys[feemarkettypes.TransientKey],
 	)
 
+	var icaAuthICAModule icactlmodule.ICAModule
 	contracts := map[common.Address]statedb.PrecompiledContractCreator{
 		common.BigToAddress(big.NewInt(100)): precompiles.NewBankContractCreator(app.BankKeeper),
 		common.BigToAddress(big.NewInt(101)): precompiles.NewIbcContractCreator(
@@ -437,6 +439,14 @@ func New(
 			&app.TransferKeeper,
 			app.BankKeeper,
 			cronostypes.ModuleName,
+		),
+		common.BigToAddress(big.NewInt(102)): precompiles.NewIcaContractCreator(
+			app.appCodec,
+			interfaceRegistry,
+			&app.IBCKeeper.ChannelKeeper,
+			&app.ICAControllerKeeper,
+			&scopedICAAuthKeeper,
+			&icaAuthICAModule,
 		),
 	}
 	app.EvmKeeper = evmkeeper.NewKeeper(
@@ -500,9 +510,11 @@ func New(
 	icaModule := ica.NewAppModule(&app.ICAControllerKeeper, nil)
 
 	app.ICAAuthKeeper = *icactlmodulekeeper.NewKeeper(appCodec,
-		app.GetSubspace(icactlmoduletypes.ModuleName), app.ICAControllerKeeper, scopedICAAuthKeeper)
+		keys[icactlmoduletypes.StoreKey],
+		app.GetSubspace(icactlmoduletypes.ModuleName), app.IBCKeeper.ChannelKeeper, app.ICAControllerKeeper, scopedICAAuthKeeper, app.EvmKeeper)
 	icaAuthModule := icactlmodule.NewAppModule(appCodec, app.ICAAuthKeeper)
 	icaAuthIBCModule := icactlmodule.NewIBCModule(app.ICAAuthKeeper)
+	icaAuthICAModule = icactlmodule.NewICAModule(app.ICAAuthKeeper)
 	icaControllerIBCModule := icacontroller.NewIBCModule(app.ICAControllerKeeper, icaAuthIBCModule)
 
 	app.GovKeeper = govkeeper.NewKeeper(

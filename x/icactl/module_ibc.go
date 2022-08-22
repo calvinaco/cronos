@@ -1,6 +1,8 @@
 package icactl
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
@@ -9,6 +11,8 @@ import (
 	porttypes "github.com/cosmos/ibc-go/v3/modules/core/05-port/types"
 	host "github.com/cosmos/ibc-go/v3/modules/core/24-host"
 	ibcexported "github.com/cosmos/ibc-go/v3/modules/core/exported"
+	proto "github.com/gogo/protobuf/proto"
+
 	"github.com/crypto-org-chain/cronos/x/icactl/keeper"
 )
 
@@ -117,6 +121,36 @@ func (am IBCModule) OnAcknowledgementPacket(
 	acknowledgement []byte,
 	relayer sdk.AccAddress,
 ) error {
+	fmt.Printf("received ICA packet %s:%s:%d acknowledgement: %s\n", packet.SourceChannel, packet.SourcePort, packet.Sequence, acknowledgement)
+
+	var ack channeltypes.Acknowledgement
+	if err := channeltypes.SubModuleCdc.UnmarshalJSON(acknowledgement, &ack); err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "cannot unmarshal ICS-27 packet acknowledgement: %v", err)
+	}
+
+	contract, found := am.keeper.GetContractByPacketID(ctx, packet.SourceChannel, packet.SourcePort, packet.Sequence)
+	if !found {
+		fmt.Printf("ICA packet %s:%s:%d contract origin not found\n", packet.SourceChannel, packet.SourcePort, packet.Sequence)
+		return nil
+	}
+	fmt.Printf("ICA packet %s:%s:%d contract origin found: %s\n", packet.SourceChannel, packet.SourcePort, packet.Sequence, contract)
+
+	if ackError, ok := ack.GetResponse().(*channeltypes.Acknowledgement_Error); ok {
+		fmt.Printf("received ICA packet error acknowledgement: %s\n", ackError)
+		am.keeper.CallOnICAPacketError(ctx, contract, packet.SourceChannel, packet.Sequence, ackError.Error)
+		return nil
+	}
+
+	txMsgData := &sdk.TxMsgData{}
+	if err := proto.Unmarshal(ack.GetResult(), txMsgData); err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "cannot unmarshal ICS-27 tx message data: %v", err)
+	}
+
+	fmt.Println("received ICA packet result acknowledgement", txMsgData)
+	if _, err := am.keeper.CallOnICAPacketResult(ctx, contract, packet.SourceChannel, packet.Sequence); err != nil {
+		fmt.Printf("cannot call contract onICAPacketResult: %s\n", err)
+		return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "cannot call contract onICAPacketResult: %v", err)
+	}
 	return nil
 }
 
@@ -126,6 +160,18 @@ func (am IBCModule) OnTimeoutPacket(
 	packet channeltypes.Packet,
 	relayer sdk.AccAddress,
 ) error {
+	fmt.Printf("received ICA packet timeout %s:%s:%d\n", packet.SourceChannel, packet.SourcePort, packet.Sequence)
+	contract, found := am.keeper.GetContractByPacketID(ctx, packet.SourceChannel, packet.SourcePort, packet.Sequence)
+	if !found {
+		fmt.Printf("ICA packet %s:%s:%d contract origin not found\n", packet.SourceChannel, packet.SourcePort, packet.Sequence)
+		return nil
+	}
+	fmt.Printf("ICA packet %s:%s:%d contract origin found: %s\n", packet.SourceChannel, packet.SourcePort, packet.Sequence, contract)
+
+	if _, err := am.keeper.CallOnICAPacketTimeout(ctx, contract, packet.SourceChannel, packet.Sequence); err != nil {
+		fmt.Printf("cannot call contract onICAPacketTimeout: %s\n", err)
+		return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "cannot call contract onICAPacketTimeout: %v", err)
+	}
 	return nil
 }
 

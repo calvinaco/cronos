@@ -12,9 +12,12 @@ import (
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v3/modules/apps/27-interchain-accounts/controller/keeper"
 	icatypes "github.com/cosmos/ibc-go/v3/modules/apps/27-interchain-accounts/types"
+	channelkeeper "github.com/cosmos/ibc-go/v3/modules/core/04-channel/keeper"
 	channeltypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
 	host "github.com/cosmos/ibc-go/v3/modules/core/24-host"
 	"github.com/crypto-org-chain/cronos/x/icactl/types"
+	"github.com/ethereum/go-ethereum/common"
+	evmkeeper "github.com/evmos/ethermint/x/evm/keeper"
 	"github.com/tendermint/tendermint/libs/log"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -23,18 +26,24 @@ import (
 type (
 	Keeper struct {
 		cdc        codec.BinaryCodec
+		storeKey   sdk.StoreKey
 		paramStore paramtypes.Subspace
 
+		channelKeeper       channelkeeper.Keeper
 		icaControllerKeeper icacontrollerkeeper.Keeper
 		scopedKeeper        capabilitykeeper.ScopedKeeper
+		evmKeeper           *evmkeeper.Keeper
 	}
 )
 
 func NewKeeper(
 	cdc codec.BinaryCodec,
+	storeKey sdk.StoreKey,
 	paramStore paramtypes.Subspace,
+	channelKeeper channelkeeper.Keeper,
 	icaControllerKeeper icacontrollerkeeper.Keeper,
 	scopedKeeper capabilitykeeper.ScopedKeeper,
+	evmKeeper *evmkeeper.Keeper,
 ) *Keeper {
 	// set KeyTable if it has not already been set
 	if !paramStore.HasKeyTable() {
@@ -43,11 +52,37 @@ func NewKeeper(
 
 	return &Keeper{
 		cdc:        cdc,
+		storeKey:   storeKey,
 		paramStore: paramStore,
 
+		channelKeeper:       channelKeeper,
 		icaControllerKeeper: icaControllerKeeper,
 		scopedKeeper:        scopedKeeper,
+		evmKeeper:           evmKeeper,
 	}
+}
+
+// GetContractByPacketID find the corresponding contract for the packet identity.
+func (k *Keeper) GetContractByPacketID(ctx sdk.Context, channelID, portID string, sequence uint64) (common.Address, bool) {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.PacketIDToContractKey(channelID, portID, sequence))
+	if len(bz) == 0 {
+		return common.Address{}, false
+	}
+
+	return common.BytesToAddress(bz), true
+}
+
+// GetContractByPacketID find the corresponding contract for the packet identity.
+func (k *Keeper) SetContractByPacketID(ctx sdk.Context, channelID, portID string, sequence uint64, contract common.Address) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.PacketIDToContractKey(channelID, portID, sequence), contract.Bytes())
+}
+
+// DeleteContractByPacketID deletes the kvpair of the packet identity.
+func (k *Keeper) DeleteContractByPacketID(ctx sdk.Context, channelID, portID string, sequence uint64) {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.PacketIDToContractKey(channelID, portID, sequence))
 }
 
 // DoSubmitTx submits a transaction to the host chain on behalf of interchain account
@@ -107,6 +142,15 @@ func (k *Keeper) GetInterchainAccountAddress(ctx sdk.Context, connectionID, owne
 	}
 
 	return icaAddress, nil
+}
+
+func (k *Keeper) GetChannelConnection(ctx sdk.Context, portID string, channelID string) (string, error) {
+	connectionID, _, err := k.channelKeeper.GetChannelConnection(ctx, portID, channelID)
+	if err != nil {
+		return "", err
+	}
+
+	return connectionID, nil
 }
 
 // ClaimCapability claims the channel capability passed via the OnOpenChanInit callback
