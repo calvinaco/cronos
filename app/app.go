@@ -403,10 +403,12 @@ func New(
 	interfaceRegistry := encodingConfig.InterfaceRegistry
 	txDecoder := encodingConfig.TxConfig.TxDecoder()
 
+	println("Calvin mode", cast.ToString(appOpts.Get("mode")))
 	var identity age.Identity
 	{
 		if cast.ToString(appOpts.Get("mode")) == "validator" {
 			krBackend := cast.ToString(appOpts.Get(clientflags.FlagKeyringBackend))
+			println("Calvin krBackend", krBackend)
 			kr, err := e2eekeyring.New("cronosd", krBackend, homePath, os.Stdin)
 			if err != nil {
 				panic(err)
@@ -422,6 +424,7 @@ func New(
 					identity = noneIdentity{}
 				}
 			}
+			println("Calvin e2ee identity loaded")
 		}
 	}
 
